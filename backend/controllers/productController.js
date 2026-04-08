@@ -8,7 +8,9 @@ const Product = require("../models/Product");
 exports.getAllProducts = async (req, res) => {
   try {
     const { category, featured, search } = req.query;
-    let query = {};
+
+    // 🚨 TỐI ƯU 1: Luôn luôn lọc ra các sản phẩm đã bị "Xóa mềm" (ẩn)
+    let query = { isHidden: { $ne: true } };
 
     // 1. Tìm kiếm theo tên (Dựa trên text index đã tạo ở Model)
     if (search) {
@@ -37,7 +39,7 @@ exports.getAllProducts = async (req, res) => {
 };
 
 /**
- * @desc    Lấy chi tiết một sản phẩm (Cần thiết cho trang Product Detail)
+ * @desc    Lấy chi tiết một sản phẩm
  * @route   GET /api/products/:id
  * @access  Public
  */
@@ -45,8 +47,11 @@ exports.getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
-    if (!product) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy sản phẩm" });
+    // Nếu không tìm thấy hoặc sản phẩm đó đã bị ẩn thì báo lỗi
+    if (!product || product.isHidden) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy sản phẩm" });
     }
 
     res.status(200).json({ success: true, data: product });
@@ -80,14 +85,15 @@ exports.createProduct = async (req, res) => {
  */
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!product)
-      return res.status(404).json({ success: false, message: "Sản phẩm không tồn tại" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Sản phẩm không tồn tại" });
 
     res.status(200).json({ success: true, data: product });
   } catch (error) {
@@ -96,19 +102,27 @@ exports.updateProduct = async (req, res) => {
 };
 
 /**
- * @desc    Xóa sản phẩm (Hàm mới để khớp với Routes)
+ * @desc    XÓA MỀM sản phẩm
  * @route   DELETE /api/products/:id
  * @access  Private/Admin
  */
 exports.deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
-      return res.status(404).json({ success: false, message: "Sản phẩm không tồn tại" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Sản phẩm không tồn tại" });
     }
 
-    res.status(200).json({ success: true, message: "Đã xóa sản phẩm thành công" });
+    // 🚨 TỐI ƯU 2: Đổi trạng thái thành true thay vì dùng findByIdAndDelete
+    product.isHidden = true;
+    await product.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Đã ẩn sản phẩm thành công (Xóa mềm)" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

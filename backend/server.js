@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-
+const cors = require("cors");
 // 1. Phải config dotenv TRƯỚC khi sử dụng bất kỳ biến process.env nào
 dotenv.config();
 
@@ -13,6 +13,7 @@ connectDB();
 // 3. Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Thêm cái này để xử lý form-data tốt hơn
+app.use(cors());
 
 // 4. Routes
 app.use("/api/products", require("./routes/productRoutes"));

@@ -1,121 +1,106 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+
+// Components & Pages Khách hàng
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import HomePage from "./pages/HomePage";
+import ProductListPage from "./pages/ProductListPage";
+import ProductDetail from "./pages/ProductDetail";
+import CartPage from "./pages/CartPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import ProfilePage from "./pages/ProfilePage";
+import AdminRoute from "./components/AdminRoute";
+import AdminLayout from "./components/AdminLayout";
+import OrderListAdmin from "./pages/admin/OrderListAdmin";
+import ProductListAdmin from "./pages/admin/ProductListAdmin";
+import ProductFormAdmin from "./pages/admin/ProductFormAdmin";
+import UserListAdmin from "./pages/admin/UserListAdmin";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AuthProvider>
+      <CartProvider>
+        <Router>
+          <Routes>
+            {/* VÙNG 1: GIAO DIỆN KHÁCH HÀNG (Có Header/Footer) */}
+            <Route
+              element={
+                <div className="min-h-screen bg-gray-50 text-gray-900 selection:bg-predator selection:text-black font-sans flex flex-col">
+                  <Header />
+                  <main className="container mx-auto px-4 flex-grow py-8">
+                    <Outlet /> {/* Các trang con sẽ được render vào đây */}
+                  </main>
+                  <Footer />
+                </div>
+              }
+            >
+              <Route path="/" element={<HomePage />} />
+              <Route path="/products" element={<ProductListPage />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
 
-      <div className="ticks"></div>
+              {/* Trang 404 cho giao diện khách */}
+              <Route
+                path="*"
+                element={
+                  <div className="text-center py-20 uppercase font-black italic text-gray-500">
+                    404 - Trang bạn tìm kiếm không tồn tại
+                  </div>
+                }
+              />
+            </Route>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+            {/* VÙNG 2: GIAO DIỆN QUẢN TRỊ VIÊN (Admin Dashboard) */}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            <Route path="/admin" element={<AdminRoute />}>
+              <Route element={<AdminLayout />}>
+                {/* Trang chủ Admin Dashboard */}
+                <Route path="orders" element={<OrderListAdmin />} />
+                <Route path="products" element={<ProductListAdmin />} />
+                <Route path="users" element={<UserListAdmin />} />
+                <Route
+                  path="products/edit/:id"
+                  element={<ProductFormAdmin />}
+                />
+                <Route
+                  index
+                  element={
+                    <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm animate-in fade-in duration-500">
+                      <h1 className="text-2xl font-black uppercase italic text-gray-900">
+                        Chào mừng trở lại!
+                      </h1>
+                      <p className="mt-4 text-gray-500 font-medium">
+                        Hãy chọn các chức năng bên menu trái để bắt đầu quản lý
+                        hệ thống PREDATOR STORE.
+                      </p>
+                    </div>
+                  }
+                />
+
+                {/* Các trang chức năng sẽ nằm ở đây (VD: /admin/orders) */}
+                {/* <Route path="orders" element={<OrderListAdmin />} /> */}
+                {/* <Route path="products" element={<ProductListAdmin />} /> */}
+                {/* <Route path="users" element={<UserListAdmin />} /> */}
+              </Route>
+            </Route>
+          </Routes>
+        </Router>
+      </CartProvider>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
