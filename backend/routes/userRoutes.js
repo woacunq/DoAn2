@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
+
 const {
   registerUser,
   loginUser,
   getUserProfile,
   getAllUsers,
   deleteUser,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userController");
 
 const { protect, admin } = require("../middleware/authMiddleware");
@@ -25,6 +28,10 @@ router.post("/login", loginUser);
 
 // Xem profile cá nhân
 router.get("/profile", protect, getUserProfile);
+
+// 🚨 ĐÃ SỬA: Gọi trực tiếp tên hàm vì đã import ở trên
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 // ==========================================
 // ROUTES CHO QUẢN TRỊ VIÊN (ADMIN)

@@ -25,6 +25,9 @@ import ProductListAdmin from "./pages/admin/ProductListAdmin";
 import ProductFormAdmin from "./pages/admin/ProductFormAdmin";
 import UserListAdmin from "./pages/admin/UserListAdmin";
 import SizeGuide from "./pages/SizeGuide";
+import PaymentResult from "./pages/PaymentResult";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+
 function App() {
   return (
     <AuthProvider>
@@ -49,9 +52,11 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/size-guide" element={<SizeGuide />} />
+              <Route path="/payment-result" element={<PaymentResult />} />
 
               {/* Trang 404 cho giao diện khách */}
               <Route
@@ -72,6 +77,7 @@ function App() {
                 <Route path="orders" element={<OrderListAdmin />} />
                 <Route path="products" element={<ProductListAdmin />} />
                 <Route path="users" element={<UserListAdmin />} />
+                <Route path="products/new" element={<ProductFormAdmin />} />
                 <Route
                   path="products/edit/:id"
                   element={<ProductFormAdmin />}

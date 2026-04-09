@@ -66,6 +66,16 @@ const LoginPage = () => {
             />
           </div>
 
+          {/* NÚT QUÊN MẬT KHẨU ĐƯỢC THÊM VÀO ĐÂY */}
+          <div className="flex justify-end !mt-3">
+            <Link
+              to="/forgot-password"
+              className="text-sm font-bold text-gray-500 hover:text-predator transition-colors"
+            >
+              Quên mật khẩu?
+            </Link>
+          </div>
+
           <button
             type="submit"
             className="w-full bg-predator text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 hover:brightness-105 shadow-md active:scale-[0.98] transition-all uppercase tracking-[0.2em]"
