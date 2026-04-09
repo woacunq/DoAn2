@@ -24,14 +24,14 @@ import OrderListAdmin from "./pages/admin/OrderListAdmin";
 import ProductListAdmin from "./pages/admin/ProductListAdmin";
 import ProductFormAdmin from "./pages/admin/ProductFormAdmin";
 import UserListAdmin from "./pages/admin/UserListAdmin";
-
+import SizeGuide from "./pages/SizeGuide";
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
           <Routes>
-            {/* VÙNG 1: GIAO DIỆN KHÁCH HÀNG (Có Header/Footer) */}
+            {/* VÙNG 1: GIAO DIỆN KHÁCH HÀNG */}
             <Route
               element={
                 <div className="min-h-screen bg-gray-50 text-gray-900 selection:bg-predator selection:text-black font-sans flex flex-col">
@@ -51,6 +51,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/size-guide" element={<SizeGuide />} />
 
               {/* Trang 404 cho giao diện khách */}
               <Route
@@ -90,7 +91,6 @@ function App() {
                   }
                 />
 
-                {/* Các trang chức năng sẽ nằm ở đây (VD: /admin/orders) */}
                 {/* <Route path="orders" element={<OrderListAdmin />} /> */}
                 {/* <Route path="products" element={<ProductListAdmin />} /> */}
                 {/* <Route path="users" element={<UserListAdmin />} /> */}

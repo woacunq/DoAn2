@@ -239,7 +239,7 @@ const HomePage = () => {
           {/* Brand 1: Predator (Thương hiệu riêng) */}
           <Link
             to="/products?brand=PREDATOR"
-            className="bg-black h-32 rounded-3xl flex items-center justify-center group hover:-translate-y-2 transition-all duration-300 shadow-lg"
+            className="bg-gray-100 h-32 rounded-3xl flex items-center justify-center group hover:-translate-y-2 transition-all duration-300 shadow-lg"
           >
             <span className="text-predator font-black text-2xl italic tracking-widest group-hover:scale-110 transition-transform">
               PREDATOR
